@@ -1,0 +1,51 @@
+.clr__editor {
+    cursor: text;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.clr__editor--line.current {
+    background-color: #fafafa;
+}
+
+.clr__editor--linenumber {
+    display: inline-block;
+    color: #ccc;
+    text-align: right;
+    border-right: 1px solid #fafafa;
+    padding: 0.2em 0.4em;
+    min-width: 3em;
+}
+
+.clr__editor--linecontent {
+    box-sizing: border-box;
+    display:inline-block;
+    padding: 0.2em 0.4em;
+}
+
+.clr__editor--linecontent:focus {
+    outline: none;
+}
+.clr__editor--linecontent[contenteditable] {
+    width: calc(100% - 3.8em - 1px);
+}
+
+.clr__editor--cursor {
+    display: inline-block;
+    height: 1.2em;
+    border-left: 2px solid #888;
+    vertical-align: text-bottom;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.hide {
+    visibility: hidden;
+}
