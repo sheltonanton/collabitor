@@ -6,9 +6,12 @@
     "@babel/core": "^7.16.5",
     "@babel/plugin-transform-runtime": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
+    "babel-loader": "^8.2.3",
     "jest": "^27.4.5",
     "jest-image-snapshot": "^4.5.1",
     "jest-puppeteer": "^6.0.3",
-    "puppeteer": "^13.0.0"
+    "memfs": "^3.4.0",
+    "puppeteer": "^13.0.0",
+    "webpack": "^5.65.0"
   }
 }

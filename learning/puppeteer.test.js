@@ -105,6 +105,31 @@ describe("Puppeteer", () => {
     //     });
     // });
 
+    test('evaluateHandle for jsonHandle', async () => {
+        const handle = await page.evaluateHandle(() => {
+            const object = {
+                name: "shelton",
+                age: 24,
+                check: function() {
+                    return this.name == "shelton" && this.age == 24;
+                }
+            }
+            return object;
+        });
+
+        let check = await page.evaluate((object) => {
+            return object.check();
+        }, handle);
+
+        expect(check).toBeTruthy();
+
+        check = await (await page.evaluateHandle((object) => {
+            return object.check();
+        }, handle)).evaluate(b => b);
+
+        expect(check).toBeTruthy();
+    });
+
     afterEach(async () => {
         await page.evaluate(() => {
             while(document.body.firstChild) {
