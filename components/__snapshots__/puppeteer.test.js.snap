@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Puppeteer loading css link inline 1`] = `
+"<html><head><style>.block {
+    border: 5px solid green;
+}</style></head><body><div id=\\"test-div\\" class=\\"block\\">Hello World</div></body></html>"
+`;
+
+exports[`Puppeteer loading multiple links inline and testing 1`] = `"<html><head><link rel=\\"stylesheet\\" href=\\"data:text/css,.block%20%7B%0A%20%20%20%20border:%205px%20solid%20green;%0A%7D\\"></head><body><div id=\\"test-div\\" class=\\"block\\">Hello World</div></body></html>"`;

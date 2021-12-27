@@ -6,30 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colabitor</title>
     <link rel='stylesheet' href='index.css'/>
+    <style type='text/css'>
+        body {
+            margin: 0;
+            height: 100vh;
+            padding: 16px;
+        }
+        .editor {
+            border: 1px solid #fafafa;
+        }
+    
+        .line {
+            height: 32px;
+            border-bottom: 1px solid black;
+        }
+    </style>
 </head>
-<style type='text/css'>
-    body {
-        margin: 0;
-        height: 100vh;
-        padding: 16px;
-    }
-    .editor {
-        border: 1px solid #fafafa;
-    }
-
-    .line {
-        height: 32px;
-        border-bottom: 1px solid black;
-    }
-</style>
 <body>
     <div class='editor'>
     </div>
-    
-    <script src='index.js'></script>
-    <script type='text/javascript'>
-        initializeEditor('editor'); //allowing for multiple tabs
-    </script>
+
     <script type='module' src='./app.js'></script>
 </body>
 </html>

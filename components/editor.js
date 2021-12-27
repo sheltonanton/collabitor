@@ -1,4 +1,4 @@
-class Editor {
+export default class Editor {
     constructor(element) {
         const classList = element.classList;
         classList.add('clr__editor');
