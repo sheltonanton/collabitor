@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Selection Range actions removing text across nested elements 1`] = `"<html><head></head><body><div id=\\"container\\"><div id=\\"blockOne\\">BlBlock Four</div></div></body></html>"`;
