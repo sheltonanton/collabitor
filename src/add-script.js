@@ -33,7 +33,8 @@ export default async function (page, filepath, name) {
         });
     });
 
-    await page.addScriptTag({
-        content: fs.readFileSync(`/${name}.bundle.js`, 'utf8')
+    return await page.addScriptTag({
+        content: fs.readFileSync(`/${name}.bundle.js`, 'utf8'),
+        id: name
     });
 }

@@ -1,10 +1,11 @@
 const Editor = (() => {
     let blockInstantiation = true;
     class _Editor {
-        constructor() {
+        constructor(element) {
             if(blockInstantiation) {
                 throw new Error("Editor class instantiation through this method is not allowed");
             }
+            this.element = element;
         }
 
         static attachTo(element) {
