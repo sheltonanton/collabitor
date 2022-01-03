@@ -1,6 +1,0 @@
-class LineNumber {
-    constructor() {
-
-    }
-    
-}
