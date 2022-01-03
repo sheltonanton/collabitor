@@ -1,9 +1,12 @@
+import fs from "fs";
+
 import {
     Editor,
     addScript
 } from "collabitor";
 
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
+
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -64,15 +67,27 @@ describe("Editor", () => {
 });
 
 describe("Editor:Snapshot", () => {
-    let editorScriptHandle;
+    let page;
+    let editorScriptHandle, editorStyleHandle;
 
     beforeAll(async () => {
+        page = await browser.newPage();
+        await page.goto("data:text/html," + fs.readFileSync("./assets/index.html"));
         editorScriptHandle = await addScript(page, "./src/editor/index.js", "Editor");
+        editorStyleHandle = await page.addStyleTag({ content: fs.readFileSync("./src/editor/index.css").toString() });
+
         await page.evaluate(() => {
             const container = document.createElement("div");
             container.id = "container";
             document.body.appendChild(container);
         });
+    });
+
+    test("script and styles are added successfully", async () => {
+        expect(editorScriptHandle).not.toBeNull();
+        expect(editorScriptHandle).not.toBeUndefined();
+        expect(editorStyleHandle).not.toBeNull();
+        expect(editorStyleHandle).not.toBeUndefined();
     });
 
     test("should display one line on attached", async () => {
@@ -82,15 +97,15 @@ describe("Editor:Snapshot", () => {
             Editor.attachTo(container);
         });
 
-        const editor = await page.waitForSelector("#container");
-        const screenshot = await editor.screenshot();
+        const screenshot = await page.screenshot();
         expect(screenshot).toMatchImageSnapshot();
     });
 
     afterAll(async () => {
-        await page.evaluate((script) => {
+        await page.evaluate((script, style) => {
             script.remove();
-        }, editorScriptHandle);
+            style.remove();
+        }, editorScriptHandle, editorStyleHandle);
 
         await page.evaluate(() => {
             while(document.body.firstChild) {

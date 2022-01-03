@@ -2,6 +2,7 @@
     cursor: text;
     font-family: monospace;
     font-size: 14px;
+    border: 1px solid #fafafa;
 }
 
 .clr__editor--line.current {
