@@ -72,7 +72,7 @@ describe("Editor:Snapshot", () => {
 
     beforeAll(async () => {
         page = await browser.newPage();
-        await page.goto("data:text/html," + fs.readFileSync("./assets/index.html"));
+        await page.goto("data:text/html," + fs.readFileSync("./public/index.html"));
         editorScriptHandle = await addScript(page, "./src/editor/index.js", "Editor");
         editorStyleHandle = await page.addStyleTag({ content: fs.readFileSync("./src/editor/index.css").toString() });
 
