@@ -85,26 +85,6 @@ describe("Puppeteer", () => {
         });
     });
 
-    // describe('request/response interception', () => {
-    //     beforeAll(async () => {
-    //         await page.setRequestInterception(true);
-    //     });
-
-    //     test('simple test', async () => {
-    //         page.on('request', (request) => {
-    //             console.log(request.url(), request.method());
-    //         });
-
-    //         await page.goto('https://www.google.com', {
-    //             waitUntil: 'networkidle2'
-    //         });
-    //     });
-
-    //     afterAll(async () => {
-    //         await page.setRequestInterception(false);
-    //     });
-    // });
-
     test('evaluateHandle for jsonHandle', async () => {
         const handle = await page.evaluateHandle(() => {
             const object = {
