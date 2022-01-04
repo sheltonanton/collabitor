@@ -2,8 +2,8 @@
   "name": "collabitor",
   "version": "1.0.0",
   "scripts": {
-    "test": "NODE_ENV=test jest src/__tests__",
-    "watch-test": "NODE_ENV=test jest --watch src/__tests__",
+    "test": "jest src/__tests__",
+    "watch-test": "jest --watch src/__tests__",
     "build": "webpack"
   },
   "private": true,
