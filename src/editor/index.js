@@ -1,3 +1,5 @@
+import "./index.css";
+
 const Editor = (() => {
     let blockInstantiation = true;
     class _Editor {

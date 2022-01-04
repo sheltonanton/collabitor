@@ -68,13 +68,12 @@ describe("Editor", () => {
 
 describe("Editor:Snapshot", () => {
     let page;
-    let editorScriptHandle, editorStyleHandle;
+    let editorScriptHandle;
 
     beforeAll(async () => {
         page = await browser.newPage();
         await page.goto("data:text/html," + fs.readFileSync("./public/index.html"));
         editorScriptHandle = await addScript(page, "./src/editor/index.js", "Editor");
-        editorStyleHandle = await page.addStyleTag({ content: fs.readFileSync("./src/editor/index.css").toString() });
 
         await page.evaluate(() => {
             const container = document.createElement("div");
@@ -86,8 +85,6 @@ describe("Editor:Snapshot", () => {
     test("script and styles are added successfully", async () => {
         expect(editorScriptHandle).not.toBeNull();
         expect(editorScriptHandle).not.toBeUndefined();
-        expect(editorStyleHandle).not.toBeNull();
-        expect(editorStyleHandle).not.toBeUndefined();
     });
 
     test("should display one line on attached", async () => {
@@ -102,10 +99,9 @@ describe("Editor:Snapshot", () => {
     });
 
     afterAll(async () => {
-        await page.evaluate((script, style) => {
+        await page.evaluate((script) => {
             script.remove();
-            style.remove();
-        }, editorScriptHandle, editorStyleHandle);
+        }, editorScriptHandle);
 
         await page.evaluate(() => {
             while(document.body.firstChild) {

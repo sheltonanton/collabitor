@@ -6,6 +6,11 @@ module.exports = {
             {
                 "regenerator": true
             }
+        ], [
+            "babel-plugin-transform-require-ignore",
+            {
+                "extensions": [".css"]
+            }
         ]
     ]
 }

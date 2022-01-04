@@ -14,6 +14,14 @@ export default async function (page, filepath, name) {
                 },
                 path: '/',
                 filename: `${name}.bundle.js`
+            },
+            module: {
+                rules: [
+                    {
+                        test: /\.css$/i,
+                        use: ["style-loader", "css-loader"]
+                    }
+                ]
             }
         });
 
