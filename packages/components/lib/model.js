@@ -30,18 +30,68 @@ const Model = (() => {
     }
 
     class Attribute extends ModelSubject {
-        #value = null;
-        constructor(value) {
+        value = null;
+        model = null;
+        property = null;
+
+        constructor(model, property, value) {
             super();
-            this.#value = value;
+            this.model = model;
+            this.property = property;
+            this.value = value;
+        }
+
+        static new(model, property, value) {
+            return new Proxy(
+                new Attribute(model, property, value),
+                {
+                    get: function(target, property) {
+                        if(target[property]) {
+                            return target[property];
+                        }
+                        return Reflect.get(target.value, property);
+                    },
+
+                    set: function(target, property, value) {
+                        if(property === "value") {
+                            target.value = value;
+                            return true;
+                        }
+
+                        if(target[property]) {
+                            throw new Error("Cannot override attribute specific properties");
+                        }
+                        return Reflect.set(target.value, property, value);
+                    }
+                }
+            );
         }
 
         getValue() {
-            return this.#value;
+            return this.value;
         }
 
         setValue(value) {
-            this.#value = value;
+            this.notify({
+                model: this.model,
+                attribute: this.property,
+                old: this.value,
+                new: value
+            });
+
+            this.value = value;
+        }
+
+        serialize() {
+            if(this.value instanceof Model || this.value instanceof Attribute) {
+                return this.value.serialize();
+            } else {
+                return this.value;
+            }
+        }
+
+        normalize() {
+
         }
     }
 
@@ -63,15 +113,15 @@ const Model = (() => {
                 values = {};
             }
 
+
+
             Object.keys(values).forEach(key => {
-                const value = values[key];
-                if(value instanceof Model) {
-                    values[key] = value;
-                }else if(typeof value === "object") {
-                    values[key] = Model.new(value);
-                }else {
-                    values[key] = new Attribute(value);
+                let value = values[key];
+                if(!(value instanceof Model) && typeof value === "object") {
+                    value = Model.new(value);
                 }
+
+                values[key] = Attribute.new(name, key, value);
             });
 
             this._values = values;
@@ -85,19 +135,6 @@ const Model = (() => {
             const ExtendedModel = Model.extend(name, attributes);
             const model = new ExtendedModel(values);
             return model;
-        }
-
-        get(attributeName) {
-            if(this._values.hasOwnProperty(attributeName)) {
-                const attribute = this._values[attributeName];
-                return attribute.getValue();
-            }else{
-                return null;
-            }
-        }
-
-        removeListener(listener) {
-            return this.unsubscribe(listener);
         }
     
         static extend(name, attributes) {
@@ -119,7 +156,7 @@ const Model = (() => {
                     }
 
                     if(! target._values[property]) {
-                        target._values[property] = new Attribute();
+                        target._values[property] = new Attribute(name, property);
                     }
                     return target._values[property];
                 },
@@ -129,19 +166,20 @@ const Model = (() => {
                     }
                     const _old = target._values[property] && target._values[property].getValue() || undefined;
 
-                    target._values[property] = target._values[property] || new Attribute();
+                    if(!target._values[property]) {
+                        target._values[property] = new Attribute(name, property);
+
+                        target.notify({
+                            model: name,
+                            attribute: property,
+                            old: _old && _old.serialize() || undefined,
+                            new: value
+                        });
+                    }
+
                     target._values[property].setValue(value);
 
-                    const result = Reflect.set(target._values, property, value);
-
-                    target.notify({
-                        model: name,
-                        attribute: property,
-                        old: _old,
-                        new: value
-                    });
-
-                    return result;
+                    return true;
                 },
                 defineProperty: function(target, property, value) {
                     if(!attributes.hasOwnProperty(property)) {
@@ -176,6 +214,26 @@ const Model = (() => {
             };
     
             return new Proxy(Model, handlers);
+        }
+
+        get(attributeName) {
+            if(this._values.hasOwnProperty(attributeName)) {
+                const attribute = this._values[attributeName];
+                return attribute.getValue();
+            }else{
+                return null;
+            }
+        }
+
+        removeListener(listener) {
+            return this.unsubscribe(listener);
+        }
+
+        serialize() {
+            return Object.entries(this._values).reduce((reduced, [key, value]) => {
+                reduced[key] = value.serialize();
+                return reduced;
+            }, {});
         }
     }
 
