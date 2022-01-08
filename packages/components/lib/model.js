@@ -49,7 +49,12 @@ const Model = (() => {
                         if(target[property]) {
                             return target[property];
                         }
-                        return Reflect.get(target.value, property);
+                        
+                        return (
+                            typeof target.value === "object" && 
+                            Reflect.get(target.value, property) || 
+                            undefined
+                        );
                     },
 
                     set: function(target, property, value) {
@@ -75,7 +80,7 @@ const Model = (() => {
             this.notify({
                 model: this.model,
                 attribute: this.property,
-                old: this.value,
+                old: this.serialize(),
                 new: value
             });
 
