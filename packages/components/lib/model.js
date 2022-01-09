@@ -118,7 +118,12 @@ const Model = (() => {
                 values = {};
             }
 
-
+            values = Object.assign(
+                Object.keys(attributes).reduce((reduced, key) => {
+                    reduced[key] = null;
+                }, {}),
+                values
+            );
 
             Object.keys(values).forEach(key => {
                 let value = values[key];
@@ -160,9 +165,6 @@ const Model = (() => {
                         return target[property];
                     }
 
-                    if(! target._values[property]) {
-                        target._values[property] = new Attribute(name, property);
-                    }
                     return target._values[property];
                 },
                 set: function(target, property, value) {
