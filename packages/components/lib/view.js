@@ -5,8 +5,9 @@ import {
 
 const View = (() => {
     class View extends Observer {
-        constructor(props) {
+        constructor(props, domString) {
             super();
+            this._domString = domString;
             this._props = props || {};
             Object.values(this._props).forEach(value => {
                 if(value instanceof Subject) {
@@ -33,9 +34,12 @@ const View = (() => {
             const renderTree = [];
 
             function r(viewExp, ...args) {
-                if(viewExp === View || View.isPrototypeOf(viewExp)) {
-                    const view = new View(args);
+                if(View.isPrototypeOf(viewExp)) {
+                    const ViewClass = viewExp;
+                    const view = new ViewClass(args);
                     renderTree.push(view);
+                }else if(typeof viewExp === "string") {
+                    const view = new View(args, viewExp);
                 }
             }
 
@@ -49,7 +53,7 @@ const View = (() => {
         }
 
         render() {
-
+            
         }
     }
 
