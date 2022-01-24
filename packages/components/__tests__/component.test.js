@@ -28,27 +28,32 @@ describe("Component", () => {
     });
 
     describe(".nest", () => {
+        class A extends Component {}
+        class B extends Component {}
+        class C extends Component {}
+
         it("should throw error when no arguments is passed", () => {
-            class A extends Component {}
             expect(() => A.show().nest()).toThrowError();
         });
 
         it("should throw error when invalid arguments are passed", () => {
-            class A extends Component {}
             expect(() => A.show().nest(
                 1
             )).toThrowError();
         });
 
         it("should accept only overriden components as arguments", () => {
-            class A extends Component {}
-            class B extends Component {}
-            class C extends Component {}
-
             expect(() => A.show().nest(
                 B.show(),
                 C.show()
             )).not.toThrowError();
+        });
+
+        it("should return the valid sub component object", () => {
+            expect(A.show().nest(
+                B.show(),
+                C.show()
+            )).toBeInstanceOf(A);
         });
     });
 });

@@ -24,7 +24,6 @@ const Component = (() => {
                 throw new Error(props, " should be a valid property object");
             }
 
-            // all values should be of either Model or Attribute or is considered a constant
             allowInstantiation = true;
             const ConcreteComponent = this;
             if(ConcreteComponent === Component) {
@@ -32,6 +31,12 @@ const Component = (() => {
             }
 
             const component = new ConcreteComponent(props);
+            // all values should be of either Model or Attribute or is considered a constant
+            Object.values(props || {}).forEach(value => {
+                if(value instanceof Model || value instanceof Model.Attribute) {
+                    value.listen(this);
+                }
+            });
             return component;
         }
 
@@ -52,6 +57,11 @@ const Component = (() => {
 
             this._nest = components;
             return this;
+        }
+
+        /* overriden from ModelObserver */
+        update(data) {
+            console.log(data);
         }
     }
 
